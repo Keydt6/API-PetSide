@@ -1,4 +1,3 @@
-Usuario.js
 'use-strict'
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
@@ -21,7 +20,7 @@ const UserSchema = new Schema({
     coverPagePicture: String 
 })
 
-UserSchema.pre('save', (next) => {
+/*UserSchema.pre('save', (next) => {
 	let user = this
 	if(!user.isModified('password'))
 		return next()
@@ -38,6 +37,6 @@ UserSchema.pre('save', (next) => {
 			next()
 		})
 	})
-})
+})*/
 
 module.exports = mongoose.model('User', UserSchema)
