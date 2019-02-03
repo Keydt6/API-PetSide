@@ -1,10 +1,10 @@
 'use-strict'
 
 const User = require('../Models/User')
+//const service = require('../Services')
 
-
-function getUser(req, res) {
-  let idUser = req.params.idUser
+function getUserById(req, res) {
+  	let idUser = req.params.idUser
 
 	User.findById(idUser, (err, user) => {
 		if(err)
@@ -20,12 +20,36 @@ function getUser(req, res) {
 function getUsers(req, res) {
 	User.find({}, (err, users) => {
 		if(err)
-			return res.status(500).send({ messaje: `Error al realizar la peticion: ${err}` })
+			return res.status(500).send({ message: `Error al realizar la peticion: ${err}` })
 
 		if(!users)
-			return res.status(404).send({ messaje: `No existen usuarios: ${err}` })
+			return res.status(404).send({ message: `No existen usuarios: ${err}` })
 
 		res.status(200).send({ users })
+	})
+}
+
+function getUserByEmail(req,res){
+	let email = req.body.email
+	User.findOne({ email }, (err, user) => {
+		if(err)
+			return res.status(500).send({ message: `Error al realizar la peticion: ${err}` })
+		if (!user)
+			return res.status(404).send({ message: `No existe el usuario con este email: ${err}` })
+		
+		res.status(200).send({ user  })
+	})
+}
+
+function getUserByName(req,res){
+	let name = req.params.name
+	User.findOne({ name }, (err,user) => {
+		if(err)
+			return res.status(500).send({ message: `Error al realizar la peticion: ${err}` })
+		if (!user)
+			return res.status(404).send({ message: `No existen usuarios con este nombre: ${err}` })
+		
+			res.status(200).send({ user })
 	})
 }
 
@@ -51,18 +75,18 @@ function saveUser(req, res) {
 
 	user.save((err, userStored) => {
 		if(err)
-			res.status(500).send({ messaje: `Error al guardar en la base de datos: ${err}`})
+			res.status(500).send({ message: `Error al guardar en la base de datos: ${err}`})
 		
 		res.status(200).send({ user: userStored })
 	})	
 }
 
 function updateUser(req, res) {
-	let userId = req.params.userId
+	let userId = req.params.idUser
 	let update = req.body
 
 	User.findByIdAndUpdate(userId, update, (err, userUpdate) => {
-		if(er)
+		if(err)
 			return res.status(500).send({ messaje: `Error al actualizar el usuario: ${err}` })
 
 		res.status(200).send({ user: userUpdate})
@@ -85,10 +109,53 @@ function deleteUser(req, res) {
 	})
 }
 
+function signUp(req, res) {
+	let user = new User()
+		user.email = req.body.email
+		user.password = req.body.password
+    	user.name = req.body.name
+	    user.countpublications= 0
+	    user.countFollowers = 0
+	    user.countFollowing = 0
+	    //user.surname = req.body.surname
+
+	    console.log(user)
+
+	user.save((err, userStored) => {
+		if(err)
+			res.status(500).send({ messaje: `Error al guardar en la base de datos: ${err}`})
+		
+		res.status(200).send({ user: userStored })
+		//return res.status(200).send({ token: service.createToken(user) })
+	})
+}
+
+function signIn(req, res) {
+	User.findOne({ email: req.body.email, password: req.body.password }, (err, user) => {
+		if(err)
+			return res.status(500).send({ message: err, status: 500})
+
+		if(!user)
+			return res.status(404).send({ message: 'No existe el usuario.', status: 404 })
+
+		/*req.user = user
+		res.status(200).send({ 
+			message: 'Has ingresado correctamente.',
+			token: service.createToken(user)
+		})*/
+
+		res.status(200).send({ items: user, status: true })
+	})
+}
+
 module.exports = {
-	getUser,
+	getUserById,
 	getUsers,
 	saveUser,
 	updateUser,
-	deleteUser
+	deleteUser,
+	signIn,
+	signUp,
+	getUserByEmail,
+	getUserByName
 }
