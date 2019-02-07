@@ -20,7 +20,7 @@ api.get('/findUserByName/:name', UserCtrl.getUserByName)
 
 
 //Rutas de Publicacion
-api.post("/savePublication", PublicationCtrl.addPublication)
+api.post("/savePublication/:id", PublicationCtrl.addPublication)
 api.get("/findPublications", PublicationCtrl.getPublications)
 api.get("/findPublicationsByUser/:id", PublicationCtrl.getPublicationsUser)
 api.get("/findPublicationById/:id", PublicationCtrl.getPublicationById)

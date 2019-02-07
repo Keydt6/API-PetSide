@@ -13,7 +13,7 @@ function getUserById(req, res) {
 		if(!user)
 			return res.status(404).send({ messaje: `El Usuario no existe.` })
 
-		res.status(200).send({ user })
+		res.status(200).send({ usuario: user })
 	})
 }
 
@@ -25,7 +25,7 @@ function getUsers(req, res) {
 		if(!users)
 			return res.status(404).send({ message: `No existen usuarios: ${err}` })
 
-		res.status(200).send({ users })
+		res.status(200).send({ usuario: users })
 	})
 }
 
@@ -37,7 +37,7 @@ function getUserByEmail(req,res){
 		if (!user)
 			return res.status(404).send({ message: `No existe el usuario con este email: ${err}` })
 		
-		res.status(200).send({ user  })
+		res.json({ user });
 	})
 }
 
@@ -49,7 +49,7 @@ function getUserByName(req,res){
 		if (!user)
 			return res.status(404).send({ message: `No existen usuarios con este nombre: ${err}` })
 		
-			res.status(200).send({ user })
+			res.status(200).send({ usuario: user })
 	})
 }
 
@@ -77,7 +77,7 @@ function saveUser(req, res) {
 		if(err)
 			res.status(500).send({ message: `Error al guardar en la base de datos: ${err}`})
 		
-		res.status(200).send({ user: userStored })
+		res.status(200).send({ usuario: userStored })
 	})	
 }
 
@@ -89,7 +89,7 @@ function updateUser(req, res) {
 		if(err)
 			return res.status(500).send({ messaje: `Error al actualizar el usuario: ${err}` })
 
-		res.status(200).send({ user: userUpdate})
+		res.status(200).send({ usuario: userUpdate})
 	})
 }
 
@@ -125,7 +125,8 @@ function signUp(req, res) {
 		if(err)
 			res.status(500).send({ messaje: `Error al guardar en la base de datos: ${err}`})
 		
-		res.status(200).send({ user: userStored })
+		res.status(200).send({ usuario: userStored })
+
 		//return res.status(200).send({ token: service.createToken(user) })
 	})
 }
@@ -143,8 +144,9 @@ function signIn(req, res) {
 			message: 'Has ingresado correctamente.',
 			token: service.createToken(user)
 		})*/
-
-		res.status(200).send({ items: user, status: true })
+		console.log(user)
+		res.status(200).send({ usuario: user })
+		
 	})
 }
 

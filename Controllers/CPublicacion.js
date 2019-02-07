@@ -44,7 +44,7 @@ function getPublicationsUser(req, res) {
 function addPublication(req, res) {
 	let publicacion = new Publicacion()
 	publicacion.description = req.body.description
-    publicacion.userId = req.body.userId
+    publicacion.userId = req.params.id
     publicacion.photo = req.body.photo
 
 	console.log(publicacion);
